@@ -1,7 +1,7 @@
 # MetaStock Database Library
 
 ```text
-		By Marc Stahl <mstahl3@uwo.ca>
+        By Marc Stahl <mstahl3@uwo.ca>
         Copyright (C) 2018 Marc Stahl
 ```
 ## WHAT IS THE METASTOCK DATABASE LIBRARY ?
