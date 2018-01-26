@@ -48,43 +48,43 @@ change for later versions as well.
 The library includes the following files.  Note that those marked as "internal" are for use within the library
 only and the developer using this library does not need to understand them
 
-|-- MetaStockDB
-|   |-- activefields.cpp                             Internal: Class to manage active fields for an equity
-|   |-- activefields.h
-|   |-- bytearray.cpp                                Internal: Class to handle an array of bytes
-|   |-- bytearray.h
-|   |-- date.cpp                                     Class to store a single date and perform functions on that date
-|   |-- date.h
-|   |-- equity.h                                     Class to store all information about a single equity
-|   |-- equityindb.cpp                               Internal: Class to store the equity data, and provide functionality
-|   |                                                          to manipulate the files / data
-|   |-- equityindb.h
-|   |-- equityindb-interface.cpp                     Internal: Override of base class functions to create a simple
-|   |                                                          interface to an equity
-|   |-- globaltypes.h                                Internal: Shared types
-|   |-- metastockdb.cpp                              Class containing all methods for accessing the database
-|   |-- metastockdb.h
-|   |-- msfileio.cpp                                 Internal: Helper functions to read/write proprietary type formats
-|   |-- msfileio.h
-|   |-- readme.md
-|   |-- tradingday.cpp                               Internal: Class to store a single day trading info for a single day
-|   |-- tradingday.h
-|   |-- tradinghistory.cpp                           Internal: Class to store all available trading data for one stock
-|   `-- tradinghistory.h
+file | description
+--------------------------- | -----------------------------------------------------------
+activefields.cpp | Internal: Class to manage active fields for an equity
+activefields.h |
+bytearray.cpp | Internal: Class to handle an array of bytes
+bytearray.h |
+date.cpp | Class to store a single date and perform functions on that date
+date.h |
+equity.h | Class to store all information about a single equity
+equityindb.cpp | Internal: Class to store the equity data, and provide functionality to manipulate the files / data
+equityindb.h |
+equityindb-interface.cpp | Internal: Override of base class functions to create a simple interface to an equity
+globaltypes.h | Internal: Shared types
+metastockdb.cpp | Class containing all methods for accessing the database
+metastockdb.h |
+msfileio.cpp | Internal: Helper functions to read/write proprietary type formats
+msfileio.h |
+readme.md |
+tradingday.cpp | Internal: Class to store a single day trading info for a single day
+tradingday.h |
+tradinghistory.cpp | Internal: Class to store all available trading data for one stock
+tradinghistory.h |
 
 
 ## WHATS NEXT
 Work continues on the library and I plan to implement all remaing CRUD features.
+The following are the features that I plan to implement:
 
-As I don't have access to all possible databases formats, I have not yet tested
+ * As I don't have access to all possible databases formats, I have not yet tested
 large datbases (more than 255 stocks, and containing an XMASTER file), or
 databases containing stocks with periodicity other than daily.  If you have
 databases in these formats please upload them so I can test them.
 
-I also plan to add performance optimization including lazy loading, so that
+ * I also plan to add performance optimization including lazy loading, so that
 large databases need not be totally loaded into memory; only equities which
 are read/manipulated will be read into memory.  
 
-I also plan to add a 'generations' feature, which allows each save of the
+ * I also plan to add a 'generations' feature, which allows each save of the
 database to create a backup directory holding the previous generation.  This
 allows for easy restoration of data following a crash or development bug.
