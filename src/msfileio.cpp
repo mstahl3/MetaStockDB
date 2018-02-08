@@ -319,15 +319,21 @@ bool MSFileIO::makeDBPath(const string pathName)
         // If found a seperator (subdir), make that dir
         if(*p == PATHSEPERATOR) {
             *p = 0; // Replace seperator with EOS to make subpath
+
+#ifdef _WIN32
+            if (_mkdir(tmp) != 0) return false;
+#else
             if (mkdir(tmp, 0x666) != 0) return false;
+#endif
+
             *p = PATHSEPERATOR; // Restore seperator
         }
 
     // Create final and full path
-    #ifdef _WIN32
+#ifdef _WIN32
     return (_mkdir(tmp) == 0);
-    #else
+#else
     return (mkdir(tmp, 0x666) == 0);
-    #endif
+#endif
 }
 
