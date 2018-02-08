@@ -7,6 +7,7 @@
  */
 
 #include <string.h>
+
 #include "equityindb.h"
 
 
@@ -22,6 +23,12 @@ std::string EquityInDB::description() const {
 void EquityInDB::description(const std::string newDescription) {
     m_description = newDescription;
 }
+
+// Get the stock symbol
+std::string EquityInDB::symbol() const {
+    return m_symbol;
+}
+
 
 //  Get which fields are active
 bool EquityInDB::fieldDateActive() const {

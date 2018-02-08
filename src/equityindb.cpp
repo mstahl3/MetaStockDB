@@ -8,9 +8,10 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+
 #include "equityindb.h"
 #include "bytearray.h"
-#include <iostream>
 
 // MASTER filler field lengths
 #define MASTER_FILLER1_LENGTH                            48
@@ -319,11 +320,6 @@ EquityInDB::EInterdayPeriodicity EquityInDB::interdayPeriodicity() const
 EquityInDB::EIntradayPeriodicity EquityInDB::intradayPeriodicity() const
 {
     return m_intradayPeriodicity;
-}
-
-std::string EquityInDB::symbol() const
-{
-    return m_symbol;
 }
 
 unsigned char EquityInDB::flag() const

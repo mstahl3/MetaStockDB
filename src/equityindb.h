@@ -123,7 +123,6 @@ public:
     unsigned char CT_V2_8_FLAG() const;
     EInterdayPeriodicity interdayPeriodicity() const;
     EIntradayPeriodicity intradayPeriodicity() const;
-    std::string symbol() const;
     unsigned char flag() const;
     TradingHistory* tradingHistory();
     bool loaded() const;
@@ -171,8 +170,11 @@ public:
         // Get the stock description
         std::string description() const;
 
-        // Set the stock description;
+        // Set the stock description
         void description(const std::string newDescription);
+
+        // Get the stock symbol
+        std::string symbol() const override;
 
         //  Get which fields are active
         bool fieldDateActive() const;

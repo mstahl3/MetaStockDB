@@ -13,9 +13,7 @@
 
 #include <string>
 #include "globaltypes.h"
-#include "equity.h"
 #include "date.h"
-
 
 class Equity
 {
@@ -31,8 +29,8 @@ public:
     // Set the stock description;
     virtual void description(const std::string newDescription) = 0;
 
-
-
+    // Get the stock symbol
+    virtual std::string symbol() const = 0;
 
 
     //----------------------------------------------------------------------------

@@ -130,7 +130,7 @@ bool TradingHistory::addTradingDayData(TradingDay newDayData)
 
         // Go through list until reach end (before first item),
         // or found a date which is <= newDataData date
-        for(tradingDayIterator = m_tradingData.rbegin(); ( (tradingDayIterator != m_tradingData.rend()) and ((*tradingDayIterator).date() > newDayData.date()) ); tradingDayIterator++);
+        for(tradingDayIterator = m_tradingData.rbegin(); ( (tradingDayIterator != m_tradingData.rend()) && ((*tradingDayIterator).date() > newDayData.date()) ); tradingDayIterator++);
 
         // If hit the begining of the list (before first element), add
         // to front and update range

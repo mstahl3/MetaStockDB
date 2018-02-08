@@ -169,7 +169,8 @@ MetaStockDB::MetaStockDB(const string dbpath, const bool lazyLoad, const unsigne
     m_XMASTERFiller1(ByteArray(XMASTER_FILLER1_LENGTH)),
     m_XMASTERFiller2(ByteArray(XMASTER_FILLER2_LENGTH)),
     m_XMASTERFiller3(ByteArray(XMASTER_FILLER3_LENGTH)),
-    m_XMASTERFiller4(ByteArray(XMASTER_FILLER4_LENGTH))
+    m_XMASTERFiller4(ByteArray(XMASTER_FILLER4_LENGTH)),
+    m_equityItValid(false)
 {
 
     // Ensure DB path has a trailing slash
@@ -1334,7 +1335,53 @@ bool MetaStockDB::populateTradingData()
 
 }
 
+// Reset at start of list, and copy first item in the list
+// into the parameter.  Return true if success, false otherwise
+bool MetaStockDB::getFirstEquity(Equity** equityPtr)
+{
+    // If empty list, no first element
+    if (m_equityMap.empty())
+    {
+        equityPtr = 0;
+        return false;
+    }
 
+    // Get first element
+    m_equityIt = m_equityMap.begin();
+    *equityPtr = static_cast<Equity*>(m_equityIt->second);
+
+    // Set flag that iterator is valid
+    m_equityItValid = true;
+    return true;
+}
+
+
+// Advance the iterator, and if there is another element
+// then copy element into the parameter.
+// Return true if success, false otherwise
+bool MetaStockDB::getNextEquityPtr(Equity** equityPtr)
+{
+    // If iterator is not valid, return failure
+    if (!m_equityItValid)
+    {
+        equityPtr = 0;
+        return false;
+    }
+
+    // Advance the iterator
+    m_equityIt++;
+
+    // If reached end, invalidate the iterator and return false
+    if (m_equityIt == m_equityMap.end()) {
+        m_equityItValid = false;
+        equityPtr = 0;
+        return false;
+    }
+
+    // Copy last element as my data
+    *equityPtr = static_cast<Equity*>(m_equityIt->second);
+    return true;
+}
 
 
 // Return a pointer to the Equity object with the name specified.  Returns NULL if not found
@@ -1368,7 +1415,7 @@ void MetaStockDB::print()
     std::cout << "Number of XMASTER records.......: " << m_XMasterNumRecords << endl;
     std::cout << "Last XMASTER data file number...: " << m_XMasterNumRecords + 1 << endl;
 
-    // Loop through equities help in map
+    // Loop through equities held in map
     for(currentEquityIterator = m_equityMap.begin(); currentEquityIterator != m_equityMap.end(); currentEquityIterator++)
         (currentEquityIterator->second)->print();
 

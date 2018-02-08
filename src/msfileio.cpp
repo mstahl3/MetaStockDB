@@ -38,7 +38,7 @@ bool MSFileIO::readUIntFromFile(ifstream &file, const unsigned int offset, unsig
     else if (integerType == EVariableTypeUShort) numBytesToRead = 2;
     else numBytesToRead = 1;
 
-    unsigned char buffer[numBytesToRead]; // Buffer to hold read bytes
+    unsigned char* buffer = new unsigned char[numBytesToRead]; // Buffer to hold read bytes
     file.read((char*) buffer, numBytesToRead); // Read 2 bytes from the file
     if (file.gcount() != numBytesToRead)
     {
@@ -56,6 +56,8 @@ bool MSFileIO::readUIntFromFile(ifstream &file, const unsigned int offset, unsig
         resultUInt = buffer[1];  // Move byte field contents from char array to an unsigned int
         resultUInt = (resultUInt << 8) + buffer[0];
     }
+
+    delete[] buffer;
 
     return true;
 }
@@ -80,11 +82,12 @@ bool MSFileIO::readUByteFromFile(ifstream &file, const unsigned int offset, unsi
 bool MSFileIO::readByteArrayFromFile(ifstream &file, const unsigned int offset, ByteArray &resultByteArray)
 {
     if (!file.seekg(offset)) return false;  // Set the file pointer in the stream, and return false if could not
-    unsigned char buffer[resultByteArray.size()];  // Buffer to hold read byte
+    unsigned char* buffer = new unsigned char[resultByteArray.size()];  // Buffer to hold read byte
     file.read((char*) buffer, resultByteArray.size());  // Read 1 byte from the file
     if (file.gcount() != resultByteArray.size()) return false;  // If did not read expected number of bytes, must be error.
 
     resultByteArray.setContents(buffer);
+    delete[] buffer;
     return true;
 }
 
@@ -98,7 +101,7 @@ bool MSFileIO::readStringFromFile(ifstream &file, const unsigned int offset, con
     resultString = "";  // Initialize the string to empty
     if (!file.seekg(offset)) return false;  // Set the file pointer in the stream, and return false if could not
 
-    char buffer[byteFieldSize + 1];  // Buffer to hold read bytes. Is 1 longer than byte field, incase
+    char* buffer = new char[byteFieldSize + 1];  // Buffer to hold read bytes. Is 1 longer than byte field, incase
     // the string takes up the entire byte field, and there is no room
     // for a null terminator.
     file.read(buffer, byteFieldSize);  // Read 'byteFieldSize' bytes from the file
@@ -106,6 +109,7 @@ bool MSFileIO::readStringFromFile(ifstream &file, const unsigned int offset, con
     buffer[byteFieldSize] = '\0';  // incase string length = byte field length.
 
     resultString = string(buffer);  // convert buffer to std::string.
+    delete[] buffer;
     return true;
 }
 
@@ -175,13 +179,15 @@ bool MSFileIO::CVSToFloat(unsigned char inputBytes[4], float &resultFloat, const
 // Return true/false to indicate if successfull.
 bool MSFileIO::readFloatFromFile(ifstream &file, const unsigned int offset, float &resultFloat, const EVariablesTypes floatType)
 {
+    bool returnValue;
+
     resultFloat = 0;  // Initialize to an invalid date
 
     // If not a valid float type, then fail
     if ((floatType != EVariableTypeCVS) && (floatType != EVariableTypeCVSR) && (floatType != EVariableTypeMBF32)) return false;
 
     if (!file.seekg(offset)) return false;  // Set the file pointer in the stream, and return false if could not
-    unsigned char buffer[4];  // Buffer to hold read bytes
+    unsigned char* buffer = new unsigned char[4];  // Buffer to hold read bytes
     file.read((char *) buffer, 4);  // Read 4 bytes from the file
 
     if (file.gcount() != 4) return false;  // If did not read expected number of bytes, must be error.
@@ -189,11 +195,16 @@ bool MSFileIO::readFloatFromFile(ifstream &file, const unsigned int offset, floa
     //Convert the read field to the type indicated in the floatType parameter
     switch (floatType) {
     case EVariableTypeMBF32:
-        return MSFileIO::MBF32ToFloat(buffer, resultFloat);
+        returnValue = MSFileIO::MBF32ToFloat(buffer, resultFloat);
+        delete[] buffer;
+        return returnValue;
     case EVariableTypeCVS:
     case EVariableTypeCVSR:
-        return MSFileIO::CVSToFloat(buffer, resultFloat, (floatType == EVariableTypeCVSR) );
+        returnValue = MSFileIO::CVSToFloat(buffer, resultFloat, (floatType == EVariableTypeCVSR) );
+        delete[] buffer;
+        return returnValue;
     default:
+        delete[] buffer;
         return false;  // Unknown float type
     }
 }
@@ -313,6 +324,10 @@ bool MSFileIO::makeDBPath(const string pathName)
         }
 
     // Create final and full path
+    #ifdef _WIN32
+    return (_mkdir(tmp) == 0);
+    #else
     return (mkdir(tmp, 0x666) == 0);
+    #endif
 }
 

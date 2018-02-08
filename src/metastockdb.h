@@ -66,6 +66,15 @@ public:
     // Return the last error message
     std::string lastErrorMessage() const;
 
+    // Reset at start of list, and copy first item in the list
+    // into the parameter.  Return true if success, false otherwise
+    bool getFirstEquity(Equity** equityPtr);
+
+    // Advance the iterator, and if there is another element
+    // then copy element into the parameter.
+    // Return true if success, false otherwise
+    bool getNextEquityPtr(Equity** equityPtr);
+
     // Return a pointer to the Equity object with the name specified.  Returns NULL if not found
     Equity * find(std::string equityName) const;
 
@@ -117,6 +126,13 @@ private:
     // Container to hold all equities found in master files
     map<string, EquityInDB*> m_equityMap;
 
+    // If the equity iterator has reached the end of the equity map, then false.
+    // Otherwise true.
+    bool m_equityItValid;
+
+    // stores position of the current equity from m_equityMap
+    map<string, EquityInDB*>::iterator m_equityIt;
+
     // Read the MASTER file
     bool readMasterFile();
 
@@ -128,6 +144,8 @@ private:
 
     // Read the Fx.DAT files
     bool populateTradingData();
+
+
 
 
 };
