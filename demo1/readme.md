@@ -3,6 +3,7 @@
 ```text
         By Marc Stahl <mstahl3@uwo.ca>
         Copyright (C) 2018 Marc Stahl
+```
 
 ## DESCRIPTION
 This demo finds an equity in the database and then prints its description.

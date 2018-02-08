@@ -3,6 +3,7 @@
 ```text
         By Marc Stahl <mstahl3@uwo.ca>
         Copyright (C) 2018 Marc Stahl
+```
 
 ## DESCRIPTION
 This demo iterates through all the equities in the database and prints their names and descriptions.
